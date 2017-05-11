@@ -1,0 +1,10 @@
+'use strict';
+
+const chprBlocked = require('../index').stop();
+
+const blockProcess = require('./blockProcess');
+
+setTimeout(cb => {
+    blockProcess(200);
+    setTimeout(() => process.exit(), 100);
+});

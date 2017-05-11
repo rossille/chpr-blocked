@@ -1,0 +1,6 @@
+{
+  "extends": "cp",
+  "env": {
+    "node": true
+  }
+}
