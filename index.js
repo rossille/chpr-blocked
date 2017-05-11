@@ -2,8 +2,6 @@
 
 const logger = require('chpr-logger');
 
-const CHECK_INTERVAL = 100;
-
 /**
  * The blocked monitor class implement a feature that detects if the
  * event loop is blocked for more than a certain time, and logs an
@@ -36,6 +34,9 @@ class BlockedMonitor {
     }
 
     this.running = true;
+
+    const checkInterval = Math.min(100, this.threshold / 2);
+
     setTimeout(() => {
       let startTime = process.hrtime();
 
@@ -47,14 +48,14 @@ class BlockedMonitor {
         const delta = process.hrtime(startTime);
         const nanosec = (delta[0] * 1e9) + delta[1];
         const ms = nanosec / 1e6;
-        const blockedTime = ms - CHECK_INTERVAL;
+        const blockedTime = ms - checkInterval;
 
         if (blockedTime > this.threshold) {
           logger.error({ blockedTime },
             '[chpr-blocked] Process blocked for an excessive amount of time');
         }
         startTime = process.hrtime();
-      }, CHECK_INTERVAL);
+      }, checkInterval);
     }, this.delay);
     return this;
   }

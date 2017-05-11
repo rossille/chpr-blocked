@@ -5,6 +5,6 @@ const chprBlocked = require('../index').stop();
 const blockProcess = require('./blockProcess');
 
 setTimeout(cb => {
-    blockProcess(200);
+    blockProcess(80);
     setTimeout(() => process.exit(), 100);
 });
