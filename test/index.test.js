@@ -121,7 +121,8 @@ describe('chprBlocked', () => {
             LOGGER_LEVEL: 'error'
           })
         },
-        (err, stdout) => {
+        (err, stdout, strerr) => {
+          expect(strerr).to.have.length(0);
           expect(err).to.equal(null);
           const log = JSON.parse(stdout);
           expect(log).to.have.property('msg',
@@ -137,11 +138,12 @@ describe('chprBlocked', () => {
         {
           env: Object.assign({}, process.env, {
             BLOCKED_DELAY: '0',
-            BLOCKED_THERSHOLD: '100',
+            BLOCKED_THERSHOLD: '50',
             LOGGER_LEVEL: 'error'
           })
         },
-        (err, stdout) => {
+        (err, stdout, strerr) => {
+          expect(strerr).to.have.length(0);
           expect(err).to.equal(null);
           expect(stdout).to.have.length(0);
           done();
