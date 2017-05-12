@@ -1,6 +1,6 @@
 {
   "name": "chpr-blocked",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Inspired from tj/blocked, but configurable with environment variables",
   "main": "index.js",
   "scripts": {
@@ -11,9 +11,11 @@
   },
   "author": "Chauffeur Privé",
   "license": "ISC",
+  "dependencies": {
+    "chpr-logger": "2.4.1"
+  },
   "devDependencies": {
     "chai": "3.5.0",
-    "chpr-logger": "2.4.1",
     "co-mocha": "1.2.0",
     "eslint": "3.10.2",
     "eslint-config-airbnb": "13.0.0",
