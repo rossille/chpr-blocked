@@ -19,12 +19,7 @@ Install the package.
 
 Then require the module in the entry point in your code (e.g. server.js, worker.js, etc...).
 
-    require('chrp-blocked');
-
-The "warmup delay" starts immediately.
-
-If you want to prevent this from happening, you can do
-`const blocked = require('chrp-blocked').stop();` and use `blocked.BlockedMonitor` directly.
+    require('chrp-blocked').start();
 
 
 ## Configuration

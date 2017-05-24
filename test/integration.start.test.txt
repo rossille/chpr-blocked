@@ -1,6 +1,6 @@
 'use strict';
 
-const chprBlocked = require('../index').stop();
+require('../index').start();
 
 const blockProcess = require('./blockProcess');
 
