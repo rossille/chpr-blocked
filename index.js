@@ -11,14 +11,8 @@ class BlockedMonitor {
   /**
    * Creates an instance of BlockedMonitor
    *
-   * @param {Number} delay A "warmup time" during which we tolerate blocking
-   * the loop, in milliseconds.
-   * @param {Number} threshold The maximum acceptable event loop blocking time,
-   * in milliseconds.
    */
-  constructor(delay, threshold) {
-    this.delay = delay;
-    this.threshold = threshold;
+  constructor() {
     this._intervalId = null;
     this.running = false;
   }
@@ -26,9 +20,12 @@ class BlockedMonitor {
   /**
    * Starts the monitoring. The "warmup time" counts from here.
    *
-   * @returns {BlockedMonitor} the instance, for chainability.
+   * @returns {void}
    */
   start() {
+    this.delay = getIntFromEnv(process.env, 'BLOCKED_DELAY', 2000);
+    this.threshold = getIntFromEnv(process.env, 'BLOCKED_THERSHOLD', 100);
+
     if (this.running) {
       throw new Error('Invalid state: already running');
     }
@@ -57,13 +54,12 @@ class BlockedMonitor {
         startTime = process.hrtime();
       }, checkInterval);
     }, this.delay);
-    return this;
   }
 
   /**
    * Stops the monitoring. No more errors will be reported unless it's started again.
    *
-   * @returns {BlockedMonitor} the instance, for chainability.
+   * @returns {void}
    */
   stop() {
     if (!this.running) {
@@ -72,7 +68,6 @@ class BlockedMonitor {
 
     this.running = false;
     clearInterval(this._intervalId);
-    return this;
   }
 }
 
@@ -101,30 +96,20 @@ function getIntFromEnv(env, name, defaultValue) {
   return value;
 }
 
-/**
- * Create, starts and return an instance of BlockedMonitor, using configuration
- * from the environment: BLOCKED_DELAY and BLOCKED_THERSHOLD variables.
- *
- * @param {Object} env The environment to use, most likely process.env.
- * @returns {BlockedMonitor} The instance in running state.
- */
-function startInstanceFromEnv(env) {
-  const delay = getIntFromEnv(env, 'BLOCKED_DELAY', 2000);
-  const threshold = getIntFromEnv(env, 'BLOCKED_THERSHOLD', 100);
-  const instance = new BlockedMonitor(delay, threshold);
-  return instance.start();
-}
-
-const singletton = startInstanceFromEnv(process.env);
+const singleton = new BlockedMonitor();
 
 module.exports = {
   BlockedMonitor,
   stop() {
-    singletton.stop();
-    return module.exports;
+    singleton.stop();
   },
-
+  start() {
+    singleton.start();
+  },
+  isRunning() {
+    return singleton.running;
+  },
   // exported for tests
   getIntFromEnv,
-  singletton
+  singleton
 };

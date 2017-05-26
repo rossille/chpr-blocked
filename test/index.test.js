@@ -9,11 +9,6 @@ const chprBlocked = require('../index');
 const blockProcess = require('./blockProcess');
 
 
-expect(chprBlocked.singletton).to.be.an.instanceOf(chprBlocked.BlockedMonitor);
-expect(chprBlocked.singletton).to.have.property('running', true);
-chprBlocked.stop();
-expect(chprBlocked.singletton).to.have.property('running', false);
-
 /**
  * Returns a promise that will be resolved after a number of milliseconds.
  *
@@ -35,7 +30,14 @@ describe('chprBlocked', () => {
     sandbox.restore();
   });
 
-  describe('getIntFromEnv', () => {
+  describe('singleton', () => {
+    it('should not be running at startup', () => {
+      expect(chprBlocked.singleton).to.be.an.instanceOf(chprBlocked.BlockedMonitor);
+      expect(chprBlocked.singleton).to.have.property('running', false);
+    });
+  });
+
+  describe('getIntFromEnv()', () => {
     it('should return the default value when name not in env', () => {
       const value = chprBlocked.getIntFromEnv({}, 'sdqjhezah', 42);
       expect(value).to.equal(42);
@@ -55,28 +57,26 @@ describe('chprBlocked', () => {
     });
   });
 
-  describe('BlockedMonitor', () => {
-    let monitor;
-
+  describe('stop() and start()', () => {
     beforeEach(() => {
-      monitor = new chprBlocked.BlockedMonitor(200, 100);
+      sandbox.stub(process, 'env', { BLOCKED_DELAY: '200', BLOCKED_THERSHOLD: '100' });
     });
 
     afterEach(() => {
-      if (monitor && monitor.running) {
-        monitor.stop();
+      if (chprBlocked.isRunning()) {
+        chprBlocked.stop();
       }
     });
 
     it('should not log before delay', function* () {
-      monitor.start();
+      chprBlocked.start();
       blockProcess(100);
       yield sleep(300);
       expect(logErrorStub.callCount).to.equal(0);
     });
 
     it('should not log before under threshold', function* () {
-      monitor.start();
+      chprBlocked.start();
       yield sleep(300);
       blockProcess(50);
       yield sleep(300);
@@ -84,7 +84,7 @@ describe('chprBlocked', () => {
     });
 
     it('should log after delay and above threshold', function* () {
-      monitor.start();
+      chprBlocked.start();
       yield sleep(300);
       blockProcess(200);
       yield sleep(300);
@@ -92,28 +92,28 @@ describe('chprBlocked', () => {
     });
 
     it('should not log after being stopped', function* () {
-      monitor.start();
+      chprBlocked.start();
       yield sleep(300);
       blockProcess(200);
-      monitor.stop();
+      chprBlocked.stop();
       yield sleep(300);
       expect(logErrorStub.callCount).to.equal(0);
     });
 
     it('should not accept to start when already running', () => {
-      monitor.start();
-      expect(() => monitor.start()).to.throw(Error, /Invalid state: already running/);
+      chprBlocked.start();
+      expect(() => chprBlocked.start()).to.throw(Error, /Invalid state: already running/);
     });
 
     it('should not accept to stop when not running', () => {
-      expect(() => monitor.stop()).to.throw(Error, /Invalid state: not running/);
+      expect(() => chprBlocked.stop()).to.throw(Error, /Invalid state: not running/);
     });
   });
 
   describe('Integration tests', () => {
-    it('should monitor when requiring chpr-blocked', done => {
+    it('should monitor when requiring chpr-blocked and starting it', done => {
       exec(
-        'node test/integration.test.txt',
+        'node test/integration.start.test.txt',
         {
           env: Object.assign({}, process.env, {
             BLOCKED_DELAY: '0',
@@ -132,9 +132,9 @@ describe('chprBlocked', () => {
         }
       );
     });
-    it('should not monitor when requiring chpr-blocked with stop()', done => {
+    it('should not monitor when requiring chpr-blocked without starting it', done => {
       exec(
-        'node test/integration.stop.test.txt',
+        'node test/integration.test.txt',
         {
           env: Object.assign({}, process.env, {
             BLOCKED_DELAY: '0',
