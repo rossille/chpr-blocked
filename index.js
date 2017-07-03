@@ -20,9 +20,10 @@ class BlockedMonitor {
   /**
    * Starts the monitoring. The "warmup time" counts from here.
    *
+   * @param {String} serviceName The service name being monitored.
    * @returns {void}
    */
-  start() {
+  start(serviceName) {
     this.delay = getIntFromEnv(process.env, 'BLOCKED_DELAY', 2000);
     this.threshold = getIntFromEnv(process.env, 'BLOCKED_THERSHOLD', 100);
 
@@ -48,7 +49,7 @@ class BlockedMonitor {
         const blockedTime = ms - checkInterval;
 
         if (blockedTime > this.threshold) {
-          logger.error({ blockedTime },
+          logger.error({ blockedTime, serviceName },
             '[chpr-blocked] Process blocked for an excessive amount of time');
         }
         startTime = process.hrtime();
@@ -103,8 +104,8 @@ module.exports = {
   stop() {
     singleton.stop();
   },
-  start() {
-    singleton.start();
+  start(serviceName) {
+    singleton.start(serviceName);
   },
   isRunning() {
     return singleton.running;
