@@ -1,9 +1,9 @@
 'use strict';
+
 const exec = require('child_process').exec;
 const logger = require('chpr-logger');
 const expect = require('chai').expect;
 const sandbox = require('sinon').sandbox.create();
-require('co-mocha')(require('mocha'));
 
 const chprBlocked = require('../index');
 const blockProcess = require('./blockProcess');
@@ -132,6 +132,7 @@ describe('chprBlocked', () => {
         }
       );
     });
+
     it('should not monitor when requiring chpr-blocked without starting it', done => {
       exec(
         'node test/integration.test.txt',
@@ -152,4 +153,3 @@ describe('chprBlocked', () => {
     });
   });
 });
-
