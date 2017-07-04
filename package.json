@@ -1,13 +1,13 @@
 {
   "name": "chpr-blocked",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Inspired from tj/blocked, but configurable with environment variables",
   "main": "index.js",
   "scripts": {
     "test": "npm run eslint && npm run coverage",
     "eslint": "eslint src --max-warnings=0",
-    "coverage": "LOGGER_LEVEL=fatal istanbul cover _mocha",
-    "mocha": "mocha"
+    "coverage": "nyc _mocha -b",
+    "mocha": "mocha -b"
   },
   "author": "Chauffeur Privé",
   "license": "ISC",
@@ -23,8 +23,8 @@
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "2.2.3",
     "eslint-plugin-react": "6.9.0",
-    "istanbul": "0.4.5",
     "mocha": "3.3.0",
+    "nyc": "11.0.3",
     "sinon": "2.2.0"
   }
 }

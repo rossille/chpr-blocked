@@ -1,9 +1,9 @@
 'use strict';
+
 const exec = require('child_process').exec;
 const logger = require('chpr-logger');
 const expect = require('chai').expect;
 const sandbox = require('sinon').sandbox.create();
-require('co-mocha')(require('mocha'));
 
 const chprBlocked = require('../index');
 const blockProcess = require('./blockProcess');
@@ -68,31 +68,32 @@ describe('chprBlocked', () => {
       }
     });
 
-    it('should not log before delay', function* () {
-      chprBlocked.start();
+    it('should not log before delay', function* it() {
+      chprBlocked.start('chpr-blocked tests');
       blockProcess(100);
       yield sleep(300);
       expect(logErrorStub.callCount).to.equal(0);
     });
 
-    it('should not log before under threshold', function* () {
-      chprBlocked.start();
+    it('should not log before under threshold', function* it() {
+      chprBlocked.start('chpr-blocked tests');
       yield sleep(300);
       blockProcess(50);
       yield sleep(300);
       expect(logErrorStub.callCount).to.equal(0);
     });
 
-    it('should log after delay and above threshold', function* () {
-      chprBlocked.start();
+    it('should log after delay and above threshold', function* it() {
+      chprBlocked.start('chpr-blocked tests');
       yield sleep(300);
       blockProcess(200);
       yield sleep(300);
       expect(logErrorStub.callCount).to.equal(1);
+      expect(logErrorStub.args[0][0]).to.have.property('serviceName', 'chpr-blocked tests');
     });
 
-    it('should not log after being stopped', function* () {
-      chprBlocked.start();
+    it('should not log after being stopped', function* it() {
+      chprBlocked.start('chpr-blocked tests');
       yield sleep(300);
       blockProcess(200);
       chprBlocked.stop();
@@ -101,8 +102,9 @@ describe('chprBlocked', () => {
     });
 
     it('should not accept to start when already running', () => {
-      chprBlocked.start();
-      expect(() => chprBlocked.start()).to.throw(Error, /Invalid state: already running/);
+      chprBlocked.start('chpr-blocked tests');
+      expect(() => chprBlocked.start('chpr-blocked tests'))
+        .to.throw(Error, /Invalid state: already running/);
     });
 
     it('should not accept to stop when not running', () => {
@@ -132,6 +134,7 @@ describe('chprBlocked', () => {
         }
       );
     });
+
     it('should not monitor when requiring chpr-blocked without starting it', done => {
       exec(
         'node test/integration.test.txt',
@@ -152,4 +155,3 @@ describe('chprBlocked', () => {
     });
   });
 });
-
