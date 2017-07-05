@@ -59,7 +59,7 @@ describe('chprBlocked', () => {
 
   describe('stop() and start()', () => {
     beforeEach(() => {
-      sandbox.stub(process, 'env', { BLOCKED_DELAY: '200', BLOCKED_THERSHOLD: '100' });
+      sandbox.stub(process, 'env', { BLOCKED_DELAY: '200', BLOCKED_THRESHOLD: '100' });
     });
 
     afterEach(() => {
@@ -119,7 +119,7 @@ describe('chprBlocked', () => {
         {
           env: Object.assign({}, process.env, {
             BLOCKED_DELAY: '0',
-            BLOCKED_THERSHOLD: '50',
+            BLOCKED_THRESHOLD: '50',
             LOGGER_LEVEL: 'error'
           })
         },
@@ -141,7 +141,7 @@ describe('chprBlocked', () => {
         {
           env: Object.assign({}, process.env, {
             BLOCKED_DELAY: '0',
-            BLOCKED_THERSHOLD: '50',
+            BLOCKED_THRESHOLD: '50',
             LOGGER_LEVEL: 'error'
           })
         },

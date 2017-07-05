@@ -25,7 +25,9 @@ class BlockedMonitor {
    */
   start(serviceName) {
     this.delay = getIntFromEnv(process.env, 'BLOCKED_DELAY', 2000);
-    this.threshold = getIntFromEnv(process.env, 'BLOCKED_THERSHOLD', 100);
+    const deprecatedTypoThreshold = getIntFromEnv(process.env, 'BLOCKED_THERSHOLD', 100);
+    // for retro-compatibility:
+    this.threshold = getIntFromEnv(process.env, 'BLOCKED_THRESHOLD', deprecatedTypoThreshold);
 
     if (this.running) {
       throw new Error('Invalid state: already running');
