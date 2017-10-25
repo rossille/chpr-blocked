@@ -1,11 +1,11 @@
-[![CircleCI](https://circleci.com/gh/transcovo/chpr-blocked.svg?style=shield)](https://circleci.com/gh/transcovo/chpr-blocked)
+[![CircleCI](https://circleci.com/gh/transcovo/chpr-blocked.svg?style=shield&circle-token=34f2510e960a3185bf5a47ec89961f6fe63817f4)](https://circleci.com/gh/transcovo/chpr-blocked)
 [![codecov](https://codecov.io/gh/transcovo/chpr-blocked/branch/master/graph/badge.svg)](https://codecov.io/gh/transcovo/chpr-blocked)
 
-chpr-blocked is a tiny utility to monitor event loop blocking, inspired from tj/blocked,
+chpr-blocked is a tiny utility to monitor event loop blocking, inspired from [tj/blocked](https://github.com/tj/node-blocked),
 but configurable with environment variables.
 
-When the event loop is blocked for more than a set threshold (defaults to 100ms), an error log
-is emitted, using chpr-logger.
+When the event loop is blocked for more than a set threshold (defaults to 100ms), an info log
+is emitted, using chpr-logger and metrics sent (increment + timing).
 
 There is a "warmup delay" (defaults to 2000ms), because it's ok to use a lot of CPU in
 at the statup of the node app (e.g. to require most of the app code).
@@ -30,4 +30,5 @@ The configuration is done with environment variables.
 |---|---|---|
 | BLOCKED_DELAY | The tolerated warmup time after requiring chpr-blocked, milliseconds  | 2000 |
 | BLOCKED_THERSHOLD | (deprecated ) see BLOCKED_THRESHOLD, here for retro-compatibility | 100 |
-| BLOCKED_THRESHOLD | The threshold above which an error will be logged, once the warmup delay is over | 100 |
+| BLOCKED_THRESHOLD | The threshold above which an error
+| BLOCKED_LOGGER_LEVEL | The logger level to apply on a blocked process | error

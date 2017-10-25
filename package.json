@@ -1,6 +1,6 @@
 {
   "name": "chpr-blocked",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Inspired from tj/blocked, but configurable with environment variables",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,8 @@
   "author": "Chauffeur Privé",
   "license": "ISC",
   "dependencies": {
-    "chpr-logger": "2.4.1"
+    "chpr-logger": "2.4.1",
+    "chpr-metrics": "1.1.0"
   },
   "devDependencies": {
     "chai": "3.5.0",
