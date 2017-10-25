@@ -33,6 +33,7 @@ class BlockedMonitor {
     if (typeof logger[this.loggerLevel] !== 'function') {
       throw new Error('Invalid logger level definition');
     }
+    this.logFunction = logger[this.loggerLevel].bind(logger);
 
     if (this.running) {
       throw new Error('Invalid state: already running');
@@ -58,7 +59,7 @@ class BlockedMonitor {
         if (blockedTime > this.threshold) {
           metrics.increment(`blocked`);
           metrics.timing(`blocked.duration`, blockedTime);
-          logger[this.loggerLevel]({ blockedTime, serviceName },
+          this.logFunction({ blockedTime, serviceName },
             '[chpr-blocked] Process blocked for an excessive amount of time');
         }
         startTime = process.hrtime();
