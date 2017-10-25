@@ -1,5 +1,6 @@
 'use strict';
 
+const metrics = require('chpr-metrics');
 const logger = require('chpr-logger');
 
 /**
@@ -28,6 +29,10 @@ class BlockedMonitor {
     const deprecatedTypoThreshold = getIntFromEnv(process.env, 'BLOCKED_THERSHOLD', 100);
     // for retro-compatibility:
     this.threshold = getIntFromEnv(process.env, 'BLOCKED_THRESHOLD', deprecatedTypoThreshold);
+    this.loggerLevel = process.env.BLOCKED_LOGGER_LEVEL || 'error';
+    if (typeof logger[this.loggerLevel] !== 'function') {
+      throw new Error('Invalid logger level definition');
+    }
 
     if (this.running) {
       throw new Error('Invalid state: already running');
@@ -51,7 +56,9 @@ class BlockedMonitor {
         const blockedTime = ms - checkInterval;
 
         if (blockedTime > this.threshold) {
-          logger.error({ blockedTime, serviceName },
+          metrics.increment(`blocked`);
+          metrics.timing(`blocked.duration`, blockedTime);
+          logger[this.loggerLevel]({ blockedTime, serviceName },
             '[chpr-blocked] Process blocked for an excessive amount of time');
         }
         startTime = process.hrtime();
