@@ -4,8 +4,8 @@
 chpr-blocked is a tiny utility to monitor event loop blocking, inspired from [tj/blocked](https://github.com/tj/node-blocked),
 but configurable with environment variables.
 
-When the event loop is blocked for more than a set threshold (defaults to 100ms), an info log
-is emitted, using chpr-logger and metrics sent (increment + timing).
+When the event loop is blocked for more than a set threshold (defaults to 100ms), a log
+is emitted (using the specified level) using chpr-logger, and metrics are sent (increment + timing).
 
 There is a "warmup delay" (defaults to 2000ms), because it's ok to use a lot of CPU in
 at the statup of the node app (e.g. to require most of the app code).
@@ -19,7 +19,7 @@ Install the package.
 
 Then require the module in the entry point in your code (e.g. server.js, worker.js, etc...).
 
-    require('chrp-blocked').start();
+    require('chpr-blocked').start();
 
 
 ## Configuration
@@ -30,5 +30,5 @@ The configuration is done with environment variables.
 |---|---|---|
 | BLOCKED_DELAY | The tolerated warmup time after requiring chpr-blocked, milliseconds  | 2000 |
 | BLOCKED_THERSHOLD | (deprecated ) see BLOCKED_THRESHOLD, here for retro-compatibility | 100 |
-| BLOCKED_THRESHOLD | The threshold above which an error
+| BLOCKED_THRESHOLD | The threshold above which a log/metric is emitted, once the warmup delay is over | 100 |
 | BLOCKED_LOGGER_LEVEL | The logger level to apply on a blocked process | error
