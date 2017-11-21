@@ -29,6 +29,5 @@ The configuration is done with environment variables.
 | Name  | Description  | Default  |
 |---|---|---|
 | BLOCKED_DELAY | The tolerated warmup time after requiring chpr-blocked, milliseconds  | 2000 |
-| BLOCKED_THERSHOLD | (deprecated ) see BLOCKED_THRESHOLD, here for retro-compatibility | 100 |
 | BLOCKED_THRESHOLD | The threshold above which a log/metric is emitted, once the warmup delay is over | 100 |
 | BLOCKED_LOGGER_LEVEL | The logger level to apply on a blocked process | error

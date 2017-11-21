@@ -26,9 +26,7 @@ class BlockedMonitor {
    */
   start(serviceName) {
     this.delay = getIntFromEnv(process.env, 'BLOCKED_DELAY', 2000);
-    const deprecatedTypoThreshold = getIntFromEnv(process.env, 'BLOCKED_THERSHOLD', 100);
-    // for retro-compatibility:
-    this.threshold = getIntFromEnv(process.env, 'BLOCKED_THRESHOLD', deprecatedTypoThreshold);
+    this.threshold = getIntFromEnv(process.env, 'BLOCKED_THRESHOLD', 100);
     this.loggerLevel = process.env.BLOCKED_LOGGER_LEVEL || 'error';
     if (typeof logger[this.loggerLevel] !== 'function') {
       throw new Error('Invalid logger level definition');
