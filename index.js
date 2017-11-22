@@ -27,7 +27,7 @@ class BlockedMonitor {
   start(serviceName) {
     this.delay = getIntFromEnv(process.env, 'BLOCKED_DELAY', 2000);
     this.threshold = getIntFromEnv(process.env, 'BLOCKED_THRESHOLD', 100);
-    this.loggerLevel = process.env.BLOCKED_LOGGER_LEVEL || 'error';
+    this.loggerLevel = process.env.BLOCKED_LOGGER_LEVEL || 'info';
     if (typeof logger[this.loggerLevel] !== 'function') {
       throw new Error('Invalid logger level definition');
     }

@@ -85,6 +85,7 @@ describe('chprBlocked', () => {
       blockProcess(100);
       yield sleep(300);
       expect(logInfoStub.callCount).to.equal(0);
+      expect(logErrorStub.callCount).to.equal(0);
       expect(metricsIncrementStub.callCount).to.equal(0);
       expect(metricsTimingStub.callCount).to.equal(0);
     });
@@ -95,6 +96,7 @@ describe('chprBlocked', () => {
       blockProcess(50);
       yield sleep(300);
       expect(logInfoStub.callCount).to.equal(0);
+      expect(logErrorStub.callCount).to.equal(0);
       expect(metricsIncrementStub.callCount).to.equal(0);
       expect(metricsTimingStub.callCount).to.equal(0);
     });
@@ -129,8 +131,9 @@ describe('chprBlocked', () => {
       yield sleep(300);
       blockProcess(200);
       yield sleep(300);
-      expect(logErrorStub.callCount).to.equal(1);
-      expect(logErrorStub.args[0][0]).to.have.property('serviceName', 'chpr-blocked tests');
+      expect(logErrorStub.callCount).to.equal(0);
+      expect(logInfoStub.callCount).to.equal(1);
+      expect(logInfoStub.args[0][0]).to.have.property('serviceName', 'chpr-blocked tests');
     });
 
     it('should not log after being stopped', function* it() {
@@ -140,6 +143,7 @@ describe('chprBlocked', () => {
       chprBlocked.stop();
       yield sleep(300);
       expect(logInfoStub.callCount).to.equal(0);
+      expect(logErrorStub.callCount).to.equal(0);
       expect(metricsIncrementStub.callCount).to.equal(0);
       expect(metricsTimingStub.callCount).to.equal(0);
     });
