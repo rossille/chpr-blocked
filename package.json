@@ -1,6 +1,6 @@
 {
   "name": "chpr-blocked",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "Inspired from tj/blocked, but configurable with environment variables",
   "main": "index.js",
   "scripts": {
