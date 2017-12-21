@@ -62,7 +62,7 @@ class BlockedMonitor {
         }
         startTime = process.hrtime();
       }, checkInterval);
-    }, this.delay);
+    }, this.delay).unref();
   }
 
   /**
