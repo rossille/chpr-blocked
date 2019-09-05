@@ -61,7 +61,7 @@ class BlockedMonitor {
             '[chpr-blocked] Process blocked for an excessive amount of time');
         }
         startTime = process.hrtime();
-      }, checkInterval);
+      }, checkInterval).unref();
     }, this.delay).unref();
   }
 
